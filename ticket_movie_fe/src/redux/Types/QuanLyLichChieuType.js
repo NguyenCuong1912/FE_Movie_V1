@@ -1,0 +1,2 @@
+export const SET_LICH_CHIEU = "SET_LICH_CHIEU";
+export const LICH_CHIEU_EDIT = "LICH_CHIEU_EDIT";

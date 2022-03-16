@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Route } from "react-router";
 import { NavLink, Redirect } from 'react-router-dom'
 import { Layout, Menu, Dropdown, } from 'antd';
+import Cookies from 'js-cookie'
 import {
     DesktopOutlined,
     UserOutlined,
@@ -15,11 +16,17 @@ import {
     HomeOutlined
 } from '@ant-design/icons';
 import { SIGN_OUT } from '../../../redux/Types/QuanLyNguoiDungType';
+import { history } from './../../../App';
 const { Sider, Header } = Layout;
 export default function Template(props) {
     const [collapsed, setCollapsed] = useState(false);
     const userLogin = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
     const dispatch = useDispatch();
+    if (!Cookies.get('cookieUser')) {
+        sessionStorage.removeItem('USER_LOGIN');
+        alert("Bạn đã hết phiên cần đăng nhập lại");
+        history.push(`/signIn`)
+    }
     useEffect(() => {
         window.scrollTo(0, 0);
     })
@@ -37,10 +44,11 @@ export default function Template(props) {
     const menu = (
         <Menu>
             <Menu.Item key="0">
-                <NavLink to={`/Admin/Users/Edit/${userLogin.id}`}>Cập nhật thông tin</NavLink>
+                <NavLink to={`/Profile`}>Cập nhật thông tin</NavLink>
             </Menu.Item>
             <Menu.Item key="1">
                 <NavLink onClick={() => {
+                    Cookies.remove('cookieUser')
                     dispatch({
                         type: SIGN_OUT
                     })

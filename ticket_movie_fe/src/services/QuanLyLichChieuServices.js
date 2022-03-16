@@ -23,6 +23,9 @@ export class QuanLyLichChieuServices extends baseServices {
     lichChieuTheoMaPhimAndMaRap = (idFilm, idCinema) => {
         return this.get(`/showtimes/listShowTime?idFilm=${idFilm}&idCinema=${idCinema}`)
     }
+    lichChieuTheoHeThongRap = (idFilm) => {
+        return this.get(`/showTimes/lichChieuTheoHeThongRap?idFilm=${idFilm}`)
+    }
 
 }
 

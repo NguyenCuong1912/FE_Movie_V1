@@ -11,6 +11,12 @@ export class QuanLySeatsServices extends baseServices {
     layDanhSachGheTheoLichCHieu = (idShowTime) => {
         return this.get(`seats?id=${idShowTime}`)
     }
+    updateSeat = (dataUpdate) => {
+        return this.put(`/seats`, dataUpdate)
+    }
+    getPriceSeat = (idShowTime) => {
+        return this.get(`/seats/priceSeats?idShowTime=${idShowTime}`)
+    }
 
 }
 export const quanLySeatsServices = new QuanLySeatsServices();

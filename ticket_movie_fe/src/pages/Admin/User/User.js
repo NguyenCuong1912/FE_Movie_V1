@@ -106,7 +106,12 @@ export default function User(props) {
                 <Search placeholder="Nhập tên người dùng" onSearch={onSearch} enterButton />
             </div>
             <div className='mx-10'>
-                <Table columns={columns} dataSource={listUser} rowKey='id' />
+                <Table onRow={(record, rowIndex) => {
+                    return {
+                        onDoubleClick: event => { history.push(`/Admin/Tickets/${record.id}`) }, // double click row
+                    };
+                }}
+                    columns={columns} dataSource={listUser} rowKey='id' />
             </div>
         </Fragment>
     )

@@ -23,9 +23,11 @@ export const themCumRapAction = (cumRapCreate) => {
         try {
             const result = await quanLyCumRapServices.themCumRap(cumRapCreate);
             if (result.status === 201) {
+                message.success("Thêm Thành Công");
                 history.push(`/Admin/GroupCinemas`)
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error)
         }
     }
@@ -71,6 +73,7 @@ export const capNhatCumRapAction = (id, groupCinemaEdit) => {
                 message.error("Thất bại")
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error)
         }
     }

@@ -16,6 +16,7 @@ function Checkout(props) {
     const dispatch = useDispatch();
     const { phongVe, listGheDangDat } = useSelector(state => state.QuanLySeatsReducer);
     const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
+    console.log(userLogin)
     const { lstGhe, film } = phongVe;
     useEffect(() => {
         dispatch(layDanhSachGheTheoLichChieu(props.match.params.id));
@@ -27,8 +28,7 @@ function Checkout(props) {
             let classGheDangDat = '';
             let classGheBanDat = '';
 
-
-            ghe.idUsers?.email === userLogin?.email ? classGheBanDat = 'gheBanDat' : classGheBanDat = '';
+            ghe.idUser === userLogin?.id ? classGheBanDat = 'gheBanDat' : classGheBanDat = '';
             let indexGhe = listGheDangDat.findIndex(gheDD => gheDD.seatName === ghe.seatName);
             indexGhe !== -1 ? classGheDangDat = 'gheDangDat' : classGheDangDat = '';
 
@@ -39,8 +39,10 @@ function Checkout(props) {
                         type: CHON_GHE,
                         gheDuocChon: ghe
                     })
-                }} disabled={ghe.bookded} className={`ghe ${classGheDaDat} ${classGheBanDat} ${classGheDangDat}  text-center`} >
-                    {ghe.bookded ? (ghe.idUsers?.email === userLogin?.email ? <UserOutlined style={{ marginBottom: 10, color: '#03a9f4' }} /> : <CloseOutlined style={{ marginBottom: 10 }} />) : ghe.seatName}
+                }} disabled={ghe.bookded} className={`ghe ${classGheDaDat} 
+                ${classGheDangDat} ${classGheBanDat}   text-center`} >
+                    {ghe.bookded ? (ghe.idUser === userLogin?.id ?
+                        <UserOutlined style={{ marginBottom: 10, color: '#03a9f4' }} /> : <CloseOutlined style={{ marginBottom: 10 }} />) : ghe.seatName}
                 </button>
                 {(index + 1) % 16 === 0 ? <br /> : ""}
             </Fragment>

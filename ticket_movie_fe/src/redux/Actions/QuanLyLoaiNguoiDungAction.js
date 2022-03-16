@@ -53,12 +53,11 @@ export const themLoaiNguoiDungAction = (dataCreate) => {
 export const xoaLoaiNguoiDungAction = (id) => {
     return async dispatch => {
         try {
-            if (id === 1 || id === 2) {
-                message.warning("Bạn không có quyền xóa loại người dùng ày")
+            if (id === 1 || id === 2 || id === 3) {
+                message.warning("Loại tài khoản này là mặc định bạn không thể xóa");
                 return;
             }
             const result = await quanLyLoaiNguoiDungServices.xoaLoaiNguoiDung(id);
-            console.log(result)
             if (result.status === 200) {
                 await dispatch(LayDanhSachLoaiNguoiDungAction());
                 message.success("Xóa Thành Công");
@@ -72,8 +71,8 @@ export const xoaLoaiNguoiDungAction = (id) => {
 export const capNhatLoaiNguoiDungAction = (id, dataEdit) => {
     return async dispatch => {
         try {
-            if (id == 1 || id == 2) {
-                message.warning("Bạn không có quyền thay đổi");
+            if (id == 1 || id == 2 || id == 3) {
+                message.warning("Loại tài khoản này là mặc định bạn không thể thay đổi ");
                 return;
             }
             const result = await quanLyLoaiNguoiDungServices.capNhatLoaiNguoiDung(id, dataEdit);

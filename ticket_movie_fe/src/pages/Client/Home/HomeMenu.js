@@ -10,49 +10,27 @@ import { quanLyRapChieuServices } from '../../../services/QuanLyRapChieuServices
 import { quanLyPhimServices } from '../../../services/QuanLyPhimServices';
 const { TabPane } = Tabs;
 function HomeMenu(props) {
-    const { heThongRap } = props
+    const { lichChieu } = props
+    console.log("lll", lichChieu)
     const dispatch = useDispatch();
     const [state, setState] = useState({
-        tabPosition: 'left', listRap: [], listPhim: []
+        tabPosition: 'left',
     })
-    const handleChangeGroup = async (id) => {
-        try {
-            const result = await quanLyRapChieuServices.layRapChieuTheoMaCumRap(id);
-            if (result.status === 200) {
-                await setState({
-                    ...state, listRap: result.data, listPhim: []
-                })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleChangeCinema = async (idCinema) => {
-        try {
-            const resultPhim = await quanLyPhimServices.layPhimTheoMaRap(idCinema);
-            if (resultPhim.status === 200) {
-                await setState({
-                    ...state, listPhim: resultPhim.data
-                })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
     return (
         <>
             <Tabs className='border rounded mx-2' tabPosition={state.tabPosition}>
-                {heThongRap.map((item, index) => {
+                {lichChieu?.map((item, index) => {
                     return <TabPane tab={
-                        <div onClick={() => { handleChangeGroup(item.id) }}>
+                        <div >
                             <img className='w-10 rounded-full' src={`${DOMAIN_STATIC_FILE}${item.logo}`} alt={`${DOMAIN_STATIC_FILE}${item.logo}`} />
                         </div>}
                         key={index}>
                         {
                             <Tabs tabPosition={state.tabPosition} >
-                                {state.listRap?.map((rap, index) => {
+                                {item.listRap?.map((rap, index) => {
                                     return <TabPane key={index} tab={
-                                        <div className='flex w-25 pb-2 border-b' onClick={() => { handleChangeCinema(rap.id) }} >
+                                        <div className='flex w-25 pb-2 border-b' >
                                             <div className='h-16 w-16'>
                                                 <img className='w-full h-full' src={`${DOMAIN_STATIC_FILE}${rap.logo}`} alt={`${DOMAIN_STATIC_FILE}${rap.logo}`} />
                                             </div>
@@ -63,7 +41,7 @@ function HomeMenu(props) {
                                             </div>
                                         </div>
                                     }>
-                                        {state.listPhim?.map((phim, index) => {
+                                        {rap.listFilm?.map((phim, index) => {
                                             return <div key={index} className=' pb-2 mb-2 border-b'>
                                                 <div className='flex ml-2' >
                                                     <img onClick={() => { history.push(`/DetailsFilm/${phim.idFilm}`) }} className='w-20 h-20 cursor-pointer' src={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} alt={`${DOMAIN_STATIC_FILE}${phim.imgFilm}`} />

@@ -11,6 +11,9 @@ export class QuanLyTicketServices extends baseServices {
     danhSachVeTheoUser = (idUser) => {
         return this.get(`/tickets/listTicket/${idUser}`)
     }
+    toTal = () => {
+        return this.get(`/tickets/total`)
+    }
 
 
 }

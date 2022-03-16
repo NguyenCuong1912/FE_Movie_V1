@@ -14,6 +14,9 @@ export class QuanLyNguoiDungServices extends baseServices {
     layDanhSachNguoiDung = (name) => {
         return this.get(`users?name=${name}`);
     }
+    layNguoiDungTheoMaLichChieu = (idLichChieu) => {
+        return this.get(`/users/userWithShowTime?id=${idLichChieu}`)
+    }
     layChiTietNguoiDung = (id) => {
         return this.get(`users/${id}`);
     }

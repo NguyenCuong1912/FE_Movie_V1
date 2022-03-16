@@ -68,7 +68,7 @@ export const capNhatPhongAction = (id, dataEdit) => {
         try {
             const result = await quanLyPhongServices.capNhatPhong(id, dataEdit);
             if (result.status === 200) {
-                message.success("Cạp nhật thành công");
+                message.success("Cập nhật thành công");
                 history.push(`/Admin/Rooms`);
             }
         } catch (error) {

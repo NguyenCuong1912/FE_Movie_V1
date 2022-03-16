@@ -23,12 +23,12 @@ export default function Header(props) {
     const handleLogin = () => {
         return <Fragment>
             {_.isEmpty(userLogin) ? <div className="items-center flex-shrink-0 hidden lg:flex">
-                <button onClick={() => { history.push('/signIn') }} className="self-center px-8 py-3 rounded hover:bg-violet-600 text-white">Đăng Nhập</button>
-                <button onClick={() => { history.push('/signUp') }} className="self-center px-8 py-3 font-semibold rounded hover:bg-violet-600 text-white">Đăng Kí</button>
+                <button onClick={() => { history.push('/signIn') }} className="font-monteCarlo self-center px-8 py-3 rounded hover:bg-violet-600 text-white">Đăng Nhập</button>
+                <button onClick={() => { history.push('/signUp') }} className="font-monteCarlo self-center px-8 py-3 font-semibold rounded hover:bg-violet-600 text-white">Đăng Kí</button>
             </div> : <div className="items-center justify-center flex-shrink-0 hidden lg:flex text-white">
                 <Dropdown overlay={menu} trigger={['click']}>
                     <a className="ant-dropdown-link text-white" onClick={e => e.preventDefault()}>
-                        <span>{userLogin.userName}</span> <DownOutlined />
+                        <span className='mr-3'>{userLogin.userName}</span>    <DownOutlined />
                     </a>
                 </Dropdown>
 
@@ -37,17 +37,17 @@ export default function Header(props) {
         </Fragment>
     }
     return (
-        <header className=" text-coolGray-800 fixed z-10 w-full bg-black bg-opacity-20 " >
+        <header className=" text-coolGray-800 fixed z-10 w-full bg-black bg-opacity-40 " >
             <div className="container flex justify-between h-16 mx-auto">
                 <NavLink to='/home' aria-label="Back to homepage" className="flex items-center p-2" >
                     <img style={{ width: '100%', height: '100%' }} src="https://movie.zalopay.vn/images/tix.svg" alt="logo" />
                 </NavLink>
                 <ul className="items-stretch hidden space-x-3 lg:flex">
                     <li className="flex">
-                        <NavLink to='/home' className="flex items-center px-4 -mb-1 border-b-2 border-transparent text-white " activeClassName='border-b-4 border-violet-600'>Trang Chủ</NavLink>
+                        <NavLink to='/home' className="font-monteCarlo flex items-center px-4 -mb-1 border-b-2 border-transparent text-white " activeClassName='border-b-4 border-violet-600'>Trang Chủ</NavLink>
                     </li>
                     <li className="flex">
-                        <NavLink to='/GroupCinema' className="flex items-center text-white px-4 -mb-1 border-b-2 border-transparent" activeClassName='border-b-4 border-violet-600'>Cụm rạp</NavLink>
+                        <NavLink to='/GroupCinema' className="font-monteCarlo flex items-center text-white px-4 -mb-1 border-b-2 border-transparent" activeClassName='border-b-4 border-violet-600'>Cụm rạp</NavLink>
                     </li>
 
 

@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { TOKEN } from "../../utils/Settings/config";
 import { ADD_USER, SET_LIST_USER, USER_EDIT } from './../Types/QuanLyNguoiDungType';
 import { history } from './../../App';
+import Cookies from 'js-cookie'
 export const signUp = (thongTinUser, type = 1) => {
     return async dispatch => {
         try {
@@ -40,7 +41,9 @@ export const signIn = (thongTinUser) => {
                 sessionStorage.removeItem("USER_LOGIN");
             }
             window.sessionStorage.setItem(TOKEN, result.data.user.token)
-            window.sessionStorage.setItem("USER_LOGIN", JSON.stringify(result.data.user.userLogin))
+            window.sessionStorage.setItem("USER_LOGIN", JSON.stringify(result.data.user.userLogin));
+            var inFifteenMinutes = new Date(new Date().getTime() + 1 * 60 * 1000);
+            Cookies.set('cookieUser', `${sessionStorage.getItem("token")}`, { expires: inFifteenMinutes })
             dispatch({
                 type: ADD_USER,
                 user: result.data.user.userLogin
@@ -89,10 +92,12 @@ export const layChiTietNguoiDungAction = (id) => {
 }
 export const capNhatNguoiDungAction = (id, userUpdate) => {
     return async dispatch => {
+        console.log(userUpdate)
         try {
             const result = await quanLyNguoiDungServices.capNhatNguoiDung(id, userUpdate);
             if (result.status === 200) {
-                if (userUpdate.type === 2) {
+                const type = JSON.parse(sessionStorage.getItem("USER_LOGIN"));
+                if (type.typeUser.type === "ADMIN" || type.typeUser.type === "SUPPER_ADMIN") {
                     history.push(`/Admin/Users`);
                 } else {
                     const dataUpdate = await quanLyNguoiDungServices.layChiTietNguoiDung(id);
@@ -108,6 +113,7 @@ export const capNhatNguoiDungAction = (id, userUpdate) => {
             message.error("Cập nhật thất bại");
             console.log(error);
         }
+
     }
 }
 
@@ -120,6 +126,7 @@ export const themNguoiDungAction = (userCraete) => {
                 history.push(`/Admin/Users`);
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error)
         }
     }
@@ -130,10 +137,11 @@ export const lockAndUnLockAction = (id, userLock) => {
         try {
             const result = await quanLyNguoiDungServices.lockAndUnlock(id, userLock);
             if (result.status === 200) {
+                message.success("Thành Công");
                 dispatch(layDanhSachnguoiDungAction());
             }
         } catch (error) {
-            console.log(error);
+            message.error("Thất Bại");
         }
     }
 }
@@ -143,9 +151,11 @@ export const xoaNguoiDungAction = (id) => {
         try {
             const result = await quanLyNguoiDungServices.xoaNguoiDung(id);
             if (result.status === 200) {
+                message.success("Xóa Thành Công");
                 dispatch(layDanhSachnguoiDungAction());
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error);
         }
     }

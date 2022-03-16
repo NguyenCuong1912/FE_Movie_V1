@@ -48,7 +48,7 @@ export default function SignIn(props) {
                 </div>
 
                 <div className='text-center '>
-                    <NavLink to='/Admin/signUp'>Bạn chưa có tài khoản ?</NavLink>
+                    <NavLink to='/signUp'>Bạn chưa có tài khoản ?</NavLink>
                 </div>
             </div>
         </form>

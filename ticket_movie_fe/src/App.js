@@ -35,6 +35,10 @@ import CheckoutTemplate from './templates/CheckoutTemplate/CheckoutTemplate';
 import ModalTrailer from './components/Modal/ModalTrailer';
 import Profile from './pages/Client/Profile/Profile';
 import GroupCinemaClient from './pages/Client/GroupCinemaClient/GroupCinema';
+import SystemCinema from './pages/Client/SystemCinema/SystemCinema';
+import DetailsCinema from './pages/Client/DetailsCinema/DetailsCinema';
+import Ticket from './pages/Admin/Ticket/Ticket';
+import UserWithShowTime from './pages/Admin/ShowTime/UserWithShowTime/UserWithShowTime';
 
 
 export const history = createBrowserHistory();
@@ -70,16 +74,21 @@ export default function App() {
                 {/* ShowTime */}
                 <Template path='/Admin/ShowTimes' exact Component={ShowTime} />
                 <Template path='/Admin/ShowTimes/Create' exact Component={ShowTimeCreate} />
-                <Template path='/Admin/ShowTimes/Edit/:id' exact Component={ShowTimeEdit} />
+                <Template path='/Admin/ShowTimes/Edit/:id' exact Component={ShowTimeEdit}
+                />
+                <Template path='/Admin/ShowTimes/userWithShowTime/:id' exact Component={UserWithShowTime} />
                 {/* TypeUser */}
                 <Template path='/Admin/TypeUsers' exact Component={TypeUser} />
                 <Template path='/Admin/TypeUsers/Create' exact Component={TypeUserCreate} />
                 <Template path='/Admin/TypeUsers/Edit/:id' exact Component={TypeUserEdit} />
+                <Template path='/Admin/Tickets/:id' exact Component={Ticket} />
 
                 <UserTemplate path="/DetailsFilm/:id" exact Component={DetailsFilm} />
                 <UserTemplate path="/Home" exact Component={HomeClient} />
                 <UserTemplate path="/Profile" exact Component={Profile} />
                 <UserTemplate path="/GroupCinema" exact Component={GroupCinemaClient} />
+                <UserTemplate path="/SystemCinema/:id" exact Component={SystemCinema} />
+                <UserTemplate path="/DetailsCinema/:id" exact Component={DetailsCinema} />
 
                 <CheckoutTemplate path="/Checkout/:id" exact Component={Checkout} />
 

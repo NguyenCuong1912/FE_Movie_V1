@@ -31,7 +31,7 @@ export default function SignUp() {
                 .required("Không được trống !"),
         }),
         onSubmit: values => {
-            dispatch(signUp(values, 2))
+            dispatch(signUp(values, 1))
         },
     });
     return (
@@ -99,7 +99,7 @@ export default function SignUp() {
 
                 </div>
                 <div className='text-center '>
-                    <NavLink to='/Admin/signIn'>Bạn đã có tài khoản ?</NavLink>
+                    <NavLink to='/signIn'>Bạn đã có tài khoản ?</NavLink>
                 </div>
             </div>
         </form>

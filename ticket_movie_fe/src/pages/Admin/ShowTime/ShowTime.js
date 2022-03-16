@@ -71,15 +71,15 @@ export default function ShowTime(props) {
             dataIndex: 'id',
             render: (text, showTime) => {
                 return <div className='flex justify-around items-center text-lg'>
-                    {/* <NavLink className='hover:text-2xl hover:text-blue-400 text-black' to={`/Admin/ShowTimes/Edit/${showTime.id}`}>
+                    <NavLink className='hover:text-2xl hover:text-blue-400 text-black' to={`/Admin/ShowTimes/Edit/${showTime.id}`}>
                         <EditOutlined key={1} className='cursor-pointer' />
-                    </NavLink> */}
-                    <div onClick={() => {
+                    </NavLink>
+                    {/* <div onClick={() => {
                         alert("Chức năng tạm khóa chưa phát triển")
                     }} className='hover:text-2xl hover:text-blue-400 text-black' >
                         <EditOutlined key={1} className='cursor-pointer' />
 
-                    </div>
+                    </div> */}
                     <div onClick={() => {
                         if (window.confirm('Bạn có muốn xóa Lịch Chiếu ? ')) {
                             dispatch(xoaLichChieuAction(showTime.id))
@@ -111,7 +111,11 @@ export default function ShowTime(props) {
                 <Search placeholder="Nhập tên Phim để tìm lịch chiếu ?" enterButton="Search" onSearch={onSearch} style={{ width: 400 }} />
 
             </div>
-            <Table columns={columns} dataSource={lstShowTime} rowKey='id' />
+            <Table onRow={(record, rowIndex) => {
+                return {
+                    onDoubleClick: event => { history.push(`/Admin/ShowTimes/userWithShowTime/${record.id}`) }, // double click row
+                };
+            }} columns={columns} dataSource={lstShowTime} rowKey='id' />
         </div>
     )
 }

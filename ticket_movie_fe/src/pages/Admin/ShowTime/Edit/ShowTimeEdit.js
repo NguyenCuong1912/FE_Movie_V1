@@ -5,9 +5,10 @@ import {
     Form,
     Input,
     Select,
-    DatePicker
+    DatePicker,
+    InputNumber
 } from 'antd';
-import { chiTietLichChieuAction } from '../../../../redux/Actions/QuanLyLichChieuAction';
+import { capNhatLichChieuAction, chiTietLichChieuAction } from '../../../../redux/Actions/QuanLyLichChieuAction';
 import { layDanhSachCumRapAction } from '../../../../redux/Actions/QuanLyCumRapAction';
 import { quanLyRapChieuServices } from '../../../../services/QuanLyRapChieuServices';
 import { useFormik } from 'formik';
@@ -16,6 +17,7 @@ import { layDanhSachPhimAction } from '../../../../redux/Actions/QuanLyPhimActio
 import { quanLyPhongServices } from '../../../../services/QuanLyPhongServices';
 import { layDanhSachPhongAction } from '../../../../redux/Actions/QuanLyPhongAction';
 import { layDanhSachRapChieuAction } from '../../../../redux/Actions/QuanLyRapChieuAction';
+import { quanLySeatsServices } from '../../../../services/QuanLySeatsServicer';
 export default function ShowTimeEdit(props) {
     const dispatch = useDispatch();
     const { showTimeEdit } = useSelector(state => state.QuanLyLichChieuReducer);
@@ -23,8 +25,6 @@ export default function ShowTimeEdit(props) {
     const { lstGroupCinemas } = useSelector(state => state.QuanLyCumRapReducer);
     const { lstPhong } = useSelector(state => state.QuanLyPhongReducer);
     const { lstRapChieu } = useSelector(state => state.QuanLyRapChieuReducer);
-    // console.log('group', groupCinemaEdit)
-    // console.log("time", showTimeEdit)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(async () => {
         dispatch(chiTietLichChieuAction(props.match.params.id));
@@ -32,19 +32,28 @@ export default function ShowTimeEdit(props) {
         dispatch(layDanhSachCumRapAction());
         dispatch(layDanhSachPhongAction());
         dispatch(layDanhSachRapChieuAction());
-
-
+        try {
+            const result = await quanLySeatsServices.getPriceSeat(props.match.params.id);
+            console.log(result)
+            if (result.status === 200) {
+                await setState({
+                    ...state, price: Number(result.data.price)
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
-    // const [state, setState] = useState({ lstRap: [], lstRoom: [] })
-    let lstRap = lstRapChieu;
-    let lstRoom = lstPhong;
+    const [state, setState] = useState({ lstRap: lstRapChieu, lstRoom: lstPhong, price: 0 })
     const changeGroupCinema = async (value) => {
         formik.setFieldValue('idGroupCinema', value)
         const result = await quanLyRapChieuServices.layRapChieuTheoMaCumRap(value);
         if (result.status === 200) {
-            console.log("11", result.data)
             formik.setFieldValue('idCinema', '')
-            lstRap = result.data
+            formik.setFieldValue('idRoom', '')
+            await setState({
+                ...state, lstRap: result.data
+            })
         }
     }
     const changeCinema = async (value) => {
@@ -52,7 +61,7 @@ export default function ShowTimeEdit(props) {
         const result = await quanLyPhongServices.layPhongTheoIDCinema(value);
         if (result.status === 200) {
             formik.setFieldValue('idRoom', '')
-            // await setState({ ...state, lstRoom: result.data })
+            await setState({ ...state, lstRoom: result.data })
         }
     }
     const formik = useFormik({
@@ -62,7 +71,8 @@ export default function ShowTimeEdit(props) {
             showDate: showTimeEdit?.showDate,
             idCinema: showTimeEdit.cinema?.id,
             idRoom: showTimeEdit.room?.id,
-            idGroupCinema: showTimeEdit.cinema?.idGroupCinema
+            idGroupCinema: showTimeEdit.cinema?.idGroupCinema,
+            price: state.price
         },
         validationSchema: Yup.object({
             idRoom: Yup.string()
@@ -75,8 +85,8 @@ export default function ShowTimeEdit(props) {
                 .required("Không được để trống !")
         }),
         onSubmit: (values) => {
-            console.log("values", values)
-            // dispatch(themLichChieuAction(values));
+            const { id } = props.match.params;
+            dispatch(capNhatLichChieuAction(id, values));
         },
     })
     const handleChange = (name) => {
@@ -163,10 +173,10 @@ export default function ShowTimeEdit(props) {
                             optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                         }
 
-                        // value={formik.values.idCinema}
+                        value={formik.values.idCinema}
                         onChange={changeCinema}
                     >
-                        {lstRap?.map((cinema, index) => {
+                        {state.lstRap?.map((cinema, index) => {
                             return <Option key={index} value={cinema.id}>{cinema.name}</Option>
                         })}
                     </Select>
@@ -187,9 +197,9 @@ export default function ShowTimeEdit(props) {
                             optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                         }
                         onChange={handleChange('idRoom')}
-                    // value={formik.values.idRoom}
+                        value={formik.values.idRoom}
                     >
-                        {lstRoom.map((room, index) => {
+                        {state.lstRoom.map((room, index) => {
                             return <Option key={index} value={room.id}>{room.roomName}</Option>
                         })}
                     </Select>
@@ -201,6 +211,12 @@ export default function ShowTimeEdit(props) {
                     <DatePicker format="DD/MM/YYYY hh:mm:ss" value={moment(formik.values.showDate)} showTime onOk={onOk} />
                     {formik.errors.showDate && formik.touched.showDate && (
                         <p className='m-0 mt-1 text-red-600'>{formik.errors.showDate}</p>
+                    )}
+                </Form.Item>
+                <Form.Item label='Giá vé'>
+                    <InputNumber value={formik.values.price} min={0} defaultValue={0} onChange={handleChange('price')} />
+                    {formik.errors.price && formik.touched.price && (
+                        <p className='m-0 mt-1 text-red-600'>{formik.errors.price}</p>
                     )}
                 </Form.Item>
                 <div className='text-center '>

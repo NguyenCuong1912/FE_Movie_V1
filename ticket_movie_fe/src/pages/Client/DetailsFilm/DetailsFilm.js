@@ -3,55 +3,21 @@ import { CustomCard } from '@tsamantanis/react-glassmorphism'
 import '@tsamantanis/react-glassmorphism/dist/index.css'
 import '../../../components/CircleRating/CircleRating.css'
 import { useSelector, useDispatch } from 'react-redux';
-// import { layChiTietThongTinPhim } from '../../redux/actions/QuanLyRapAction';
 import moment from 'moment';
 import { Rate, Button, Tabs } from 'antd';
-import _, { result } from 'lodash';
+import _ from 'lodash';
 import { NavLink } from 'react-router-dom';
 import { layChiTietPhimAction } from './../../../redux/Actions/QuanLyPhimAction';
 import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
-import { quanLyPhimServices } from '../../../services/QuanLyPhimServices';
-import { quanLyRapChieuServices } from '../../../services/QuanLyRapChieuServices';
-import { layDanhSachCumRapAction } from '../../../redux/Actions/QuanLyCumRapAction';
-import { quanLyLichChieuServices } from '../../../services/QuanLyLichChieuServices';
+import { lichChieuTheoHeThongRap } from '../../../redux/Actions/QuanLyLichChieuAction';
 export default function DetailsFilm(props) {
     const dispatch = useDispatch();
     const { phimEdit } = useSelector(state => state.QuanLyPhimReducer);
-    const { lstGroupCinemas } = useSelector(state => state.QuanLyCumRapReducer);
+    const { showTime } = useSelector(state => state.QuanLyLichChieuReducer)
     const id = props.match.params.id;
-
-    const [state, setState] = useState({
-        listRap: [], listPhim: []
-    })
-    console.log(state.listPhim)
-    const handleChangeGroup = async (id) => {
-        try {
-            const result = await quanLyRapChieuServices.layRapChieuTheoMaCumRap(id);
-            if (result.status === 200) {
-                await setState({
-                    ...state, listRap: result.data, listPhim: []
-                })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleChangeCinema = async (idCinema) => {
-        try {
-            const resultPhim = await quanLyLichChieuServices.lichChieuTheoMaPhimAndMaRap(props.match.params.id, idCinema);
-            if (resultPhim.status === 200) {
-                await setState({
-                    ...state, listPhim: resultPhim.data
-                })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
     useEffect(() => {
         dispatch(layChiTietPhimAction(id));
-        dispatch(layDanhSachCumRapAction())
-
+        dispatch(lichChieuTheoHeThongRap(id))
     }, [])
     const { TabPane } = Tabs;
     return (
@@ -92,17 +58,17 @@ export default function DetailsFilm(props) {
                         <Tabs defaultActiveKey="1" centered>
                             <TabPane tab="Lịch chiếu" key="1">
                                 <Tabs tabPosition='left'>
-                                    {lstGroupCinemas?.map((rapChieu, index) => {
+                                    {showTime?.map((rapChieu, index) => {
                                         return <TabPane className='my-3' key={index} tab={
-                                            <div onClick={() => { handleChangeGroup(rapChieu.id) }}>
+                                            <div >
                                                 <img style={{ width: 50, height: 50 }} src={`${DOMAIN_STATIC_FILE}${rapChieu.logo}`} alt={rapChieu.logo} />
                                             </div>
                                         }
                                         >
                                             <Tabs tabPosition='left'>
-                                                {state.listRap?.map((rap, index) => {
+                                                {rapChieu.listRap?.map((rap, index) => {
                                                     return <TabPane key={index} tab={
-                                                        <div onClick={() => { handleChangeCinema(rap.id) }} style={{ width: 300 }} className='flex flex-wrap'>
+                                                        <div style={{ width: 300 }} className='flex flex-wrap'>
                                                             <img style={{ width: 60, height: 60 }} src={`${DOMAIN_STATIC_FILE}${rap.logo}`} alt={`${rap.logo}`} />
                                                             <div className='text-black text-left ml-3'>
                                                                 <p>{_.truncate(rap.name, {
@@ -116,7 +82,7 @@ export default function DetailsFilm(props) {
                                                             </div>
                                                         </div>
                                                     }>
-                                                        {state.listPhim?.map((lichChieu, index) => {
+                                                        {_.head(rap.listFilm)?.lstShowDate?.map((lichChieu, index) => {
                                                             return <Button className='mx-3 border rounded px-3 py-2' key={index}>
                                                                 <NavLink to={`/checkout/${lichChieu.id}`}>
                                                                     {moment(lichChieu.showDate).format("hh:mm A")}

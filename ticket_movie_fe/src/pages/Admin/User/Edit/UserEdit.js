@@ -18,7 +18,6 @@ export default function UserEdit(props) {
         enableReinitialize: true,
         initialValues: {
             email: userEdit.email,
-            password: '',
             phoneNumber: userEdit.phoneNumber,
             userName: userEdit?.userName,
             typeUser: userEdit?.type_user?.id
@@ -32,9 +31,6 @@ export default function UserEdit(props) {
                     message: "Số điện thoại chưa đúng",
                     excludeEmptyString: false,
                 })
-                .required("Không được trống !"),
-            password: Yup.string()
-                .min(6, "Tối thiểu 6 kí tự")
                 .required("Không được trống !"),
             userName: Yup.string()
                 .required("Không được trống !"),
@@ -54,14 +50,6 @@ export default function UserEdit(props) {
                     <input disabled name="email" value={formik.values.email} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="name@flowbite.com" />
                     {formik.errors.email && formik.touched.email && (
                         <p className='m-0 mt-1 text-red-600'>{formik.errors.email}</p>
-                    )}
-                </div>
-                {/* PassWord */}
-                <div className="mb-6">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mật Khẩu</label>
-                    <input type='password' value={formik.values.password} onChange={formik.handleChange} name="password" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" />
-                    {formik.errors.password && formik.touched.password && (
-                        <p className='m-0 mt-1 text-red-600'>{formik.errors.password}</p>
                     )}
                 </div>
                 {/* UserName */}

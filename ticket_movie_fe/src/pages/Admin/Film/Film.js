@@ -62,9 +62,7 @@ export default function Film(props) {
                     }} className='hover:text-2xl hover:text-red-400 text-black' >
                         <DeleteOutlined key={2} className=' cursor-pointer' />
                     </div>
-                    <NavLink className='hover:text-2xl hover:text-yellow-500 text-black' to={`/admin/films/showtime/`}>
-                        <CalendarOutlined key={1} className='cursor-pointer' />
-                    </NavLink>
+
                 </div>
             }
         },

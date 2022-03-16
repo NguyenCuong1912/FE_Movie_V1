@@ -28,6 +28,7 @@ export const themPhimAction = (dataFilm) => {
                 message.error('Thất Bại');
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error);
         }
     }
@@ -59,6 +60,7 @@ export const capNhatPhimAction = (id, phimEdit) => {
                 message.error("Cập nhật thất bại");
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error);
         }
     }
@@ -75,6 +77,7 @@ export const xoaPhimAction = (id) => {
                 message.error("Xóa Thất Bại");
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error);
         }
     }

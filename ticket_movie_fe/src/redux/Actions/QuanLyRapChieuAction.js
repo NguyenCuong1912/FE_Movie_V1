@@ -28,6 +28,7 @@ export const themRapAction = (dataCreate) => {
                 history.push(`/Admin/Cinemas`);
             }
         } catch (error) {
+            message.error("Thất Bại")
             console.log(error)
         }
     }
@@ -57,6 +58,7 @@ export const capNhatRapChieuAction = (id, dataEdit) => {
                 history.push(`/Admin/Cinemas`);
             }
         } catch (error) {
+            message.error("Thất Bại");
             console.log(error)
         }
     }

@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 .font-monteCarlo {
-  font-family: "MonteCarlo", cursive !important;
+  /* font-family: "Satisfy", cursive !important; */
+  font-family: "Nanum Myeongjo", serif !important;
   font-size: 18px;
   letter-spacing: 2px;
   font-weight: bold;

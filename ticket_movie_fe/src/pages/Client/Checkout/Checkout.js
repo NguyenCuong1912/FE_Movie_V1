@@ -9,17 +9,22 @@ import moment from 'moment';
 import { history } from '../../../App';
 import { layDanhSachGheTheoLichChieu } from '../../../redux/Actions/QuanLySeatsAction';
 import { DOMAIN_STATIC_FILE } from '../../../utils/Settings/config';
-import { CHON_GHE } from '../../../redux/Types/QuanLySeatsType';
+import { CHON_GHE, CLEAR_VE_DANG_CHON } from '../../../redux/Types/QuanLySeatsType';
 import { danhSachVeTheoUserAction, datVe } from '../../../redux/Actions/QuanLyTicketAction';
 import { SET_CHANGE_TABS } from '../../../redux/Types/QuanLyTicketType';
+import Countdown from 'react-countdown';
 function Checkout(props) {
     const dispatch = useDispatch();
     const { phongVe, listGheDangDat } = useSelector(state => state.QuanLySeatsReducer);
     const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
-    console.log(userLogin)
     const { lstGhe, film } = phongVe;
+    const [state, setState] = useState('00:00:00');
     useEffect(() => {
         dispatch(layDanhSachGheTheoLichChieu(props.match.params.id));
+        dispatch({
+            type: CLEAR_VE_DANG_CHON
+        })
+        setState(Date.now() + 5 * 60 * 1000)
     }, [])
 
     const renderListGhe = () => {
@@ -31,8 +36,6 @@ function Checkout(props) {
             ghe.idUser === userLogin?.id ? classGheBanDat = 'gheBanDat' : classGheBanDat = '';
             let indexGhe = listGheDangDat.findIndex(gheDD => gheDD.seatName === ghe.seatName);
             indexGhe !== -1 ? classGheDangDat = 'gheDangDat' : classGheDangDat = '';
-
-
             return <Fragment key={index}>
                 <button onClick={() => {
                     dispatch({
@@ -61,7 +64,13 @@ function Checkout(props) {
                     </div>
                     <div>
                         <p className='mb-0 text-gray-500'>Thời gian giữ ghế</p>
-                        <h2 className='mb-0 text-2xl text-center text-red-600'>5:00</h2>
+                        <h2 className='mb-0 text-2xl text-center text-red-600'>{<Countdown onComplete={() => {
+                            alert("Quá Thời gian đặt Vé")
+                            dispatch({
+                                type: CLEAR_VE_DANG_CHON
+                            })
+                            history.push('/')
+                        }} daysInHours date={state} />}</h2>
                     </div>
                 </div>
                 <div>
@@ -135,12 +144,17 @@ function Checkout(props) {
                     <hr />
                 </div>
                 <div onClick={() => {
-                    const thongTinVeDat = {
-                        userId: userLogin.id,
-                        listTicket: listGheDangDat,
-                        idShowTime: props.match.params.id
+                    if (JSON.stringify(listGheDangDat) !== '[]') {
+                        const thongTinVeDat = {
+                            userId: userLogin.id,
+                            listTicket: listGheDangDat,
+                            idShowTime: props.match.params.id
+                        }
+                        dispatch(datVe(thongTinVeDat))
+                    } else {
+                        alert("Bạn cần chọn ghế ngồi ")
                     }
-                    dispatch(datVe(thongTinVeDat))
+
                 }} className='mb-1 cursor-pointer'>
                     <div className='py-3 rounded bg-red-500 text-white text-lg text-center'>
                         ĐẶT VÉ
@@ -157,6 +171,7 @@ function KetQuaDatVe(props) {
     const dispatch = useDispatch();
     const { userLogin } = useSelector(state => state.QuanLyNguoiDungReducer);
     const { lstTicketWithUser } = useSelector(state => state.QuanLyTicketReducer);
+    console.log("lst", lstTicketWithUser)
     useEffect(() => {
         dispatch(danhSachVeTheoUserAction(userLogin.id))
     }, [])
@@ -169,7 +184,7 @@ function KetQuaDatVe(props) {
                         <h2 className="text-gray-900 title-font font-medium">{ticket.nameFilm}</h2>
                         <p className="text-gray-500">{ticket.groupName} - {ticket.cinemaName}</p>
                         <p className="text-gray-500">Ngày Chiếu: {moment(ticket.showDate).format("DD/MM/YYYY hh:mm A")}</p>
-                        <p className="text-gray-500">Ngày đặt: {moment(ticket.createdAt).format(" DD/MM/YYYY ")}</p>
+                        <p className="text-gray-500">Ngày đặt: {moment(ticket.lstTicket[0].createdAt).format(" DD/MM/YYYY ")}</p>
                         <p className="text-gray-500 text-base">Ghế : {ticket.lstTicket.map((soGhe, index) => {
                             return <span className='text-red-700' key={index}>{soGhe.seatName} </span>
                         })}</p>

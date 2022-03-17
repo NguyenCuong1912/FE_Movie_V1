@@ -37,7 +37,7 @@ export default function Template(props) {
         alert("Bạn cần đăng nhập để thực hiện chức năng");
         return <Redirect to='/signIn' />
     }
-    if (userLogin.typeUser.type !== "ADMIN") {
+    if (userLogin.typeUser.type === "CLIENT") {
         alert("Bạn Không có quyền để truy cập trang Web này ");
         return <Redirect to='/' />
     }

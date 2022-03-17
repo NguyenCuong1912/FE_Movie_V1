@@ -42,7 +42,7 @@ export const signIn = (thongTinUser) => {
             }
             window.sessionStorage.setItem(TOKEN, result.data.user.token)
             window.sessionStorage.setItem("USER_LOGIN", JSON.stringify(result.data.user.userLogin));
-            var inFifteenMinutes = new Date(new Date().getTime() + 1 * 60 * 1000);
+            var inFifteenMinutes = new Date(new Date().getTime() + 15 * 60 * 1000);
             Cookies.set('cookieUser', `${sessionStorage.getItem("token")}`, { expires: inFifteenMinutes })
             dispatch({
                 type: ADD_USER,

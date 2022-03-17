@@ -106,6 +106,7 @@ export default function User(props) {
                 <Search placeholder="Nhập tên người dùng" onSearch={onSearch} enterButton />
             </div>
             <div className='mx-10'>
+                <p className='text-red-500 mx-5'>* Nhấn 2 lần vào tên người dùng để xem lịch sử đặt vé</p>
                 <Table onRow={(record, rowIndex) => {
                     return {
                         onDoubleClick: event => { history.push(`/Admin/Tickets/${record.id}`) }, // double click row

@@ -74,12 +74,6 @@ export default function ShowTime(props) {
                     <NavLink className='hover:text-2xl hover:text-blue-400 text-black' to={`/Admin/ShowTimes/Edit/${showTime.id}`}>
                         <EditOutlined key={1} className='cursor-pointer' />
                     </NavLink>
-                    {/* <div onClick={() => {
-                        alert("Chức năng tạm khóa chưa phát triển")
-                    }} className='hover:text-2xl hover:text-blue-400 text-black' >
-                        <EditOutlined key={1} className='cursor-pointer' />
-
-                    </div> */}
                     <div onClick={() => {
                         if (window.confirm('Bạn có muốn xóa Lịch Chiếu ? ')) {
                             dispatch(xoaLichChieuAction(showTime.id))
@@ -109,8 +103,8 @@ export default function ShowTime(props) {
                     </div>
                 </Button>
                 <Search placeholder="Nhập tên Phim để tìm lịch chiếu ?" enterButton="Search" onSearch={onSearch} style={{ width: 400 }} />
-
             </div>
+            <p className='text-red-500 mx-5'>* Nhấn 2 lần vào tên tên phim để xem người đặt với lịch chiếu </p>
             <Table onRow={(record, rowIndex) => {
                 return {
                     onDoubleClick: event => { history.push(`/Admin/ShowTimes/userWithShowTime/${record.id}`) }, // double click row

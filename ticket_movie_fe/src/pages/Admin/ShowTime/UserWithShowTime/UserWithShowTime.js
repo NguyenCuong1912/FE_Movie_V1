@@ -36,7 +36,7 @@ export default function UserWithShowTime(props) {
     return (
         <div>
             <h3 className='text-center my-4 text-2xl'>Danh Sách Người Dùng Đặt Vé Xem Với Lịch Chiếu {props.match.params.id} </h3>
-            <Table dataSource={state} columns={columns} rowKey='email' />;
+            <Table dataSource={state} columns={columns} rowKey='email' />
         </div>
     )
 }
